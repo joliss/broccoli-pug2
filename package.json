@@ -12,9 +12,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/broccolijs/broccoli-pug2"
+    "url": "https://github.com/joliss/broccoli-pug2"
   },
-  "homepage": "https://github.com/broccolijs/broccoli-pug2",
+  "homepage": "https://github.com/joliss/broccoli-pug2",
   "dependencies": {
     "glob": "^7.1.1",
     "mkdirp": "^0.5.1",
