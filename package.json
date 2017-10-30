@@ -1,0 +1,38 @@
+{
+  "name": "broccoli-pug2",
+  "description": "Broccoli plugin for the Pug template language (work in progress)",
+  "version": "0.1.0",
+  "author": "Jo Liss <joliss42@gmail.com>",
+  "main": "index.js",
+  "license": "MIT",
+  "keywords": [
+    "broccoli-plugin",
+    "template",
+    "pug"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/broccolijs/broccoli-pug2"
+  },
+  "homepage": "https://github.com/broccolijs/broccoli-pug2",
+  "dependencies": {
+    "glob": "^7.1.1",
+    "mkdirp": "^0.5.1",
+    "pug": "2.0.0-beta7",
+    "broccoli-multifilter": "^1.0.0"
+  },
+  "devDependencies": {
+    "broccoli-fixture": "^0.1.0",
+    "broccoli-plugin": "^1.3.0",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "fixturify": "^0.3.3",
+    "mocha": "^3.2.0"
+  },
+  "engines": {
+    "node": ">= 4.0.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
+}
