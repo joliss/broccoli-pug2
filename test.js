@@ -28,25 +28,18 @@ describe("broccoli-pug2", () => {
   });
 
   describe("JS output", () => {
-    function compileFooJs(moduleType) {
+    function compileFooJs(outputType) {
       let source = new fixture.Node({
         "foo.pug": "include ./bar.pug",
         "bar.pug": "div bar_contents"
       });
-      let pugNode = new BroccoliPug(source, "*.pug", {
-        render: false,
-        moduleType: moduleType
-      });
+      let pugNode = new BroccoliPug(source, "*.pug", outputType);
 
       return fixture.build(pugNode).then(output => {
         expect(output["foo.js"]).to.match(/function [\s\S]*bar_contents/);
         return output["foo.js"];
       });
     }
-
-    it("default (ES6)", () => {
-      return expect(compileFooJs(null)).to.eventually.match(/export /);
-    });
 
     it("ES6", () => {
       return expect(compileFooJs("es")).to.eventually.match(/export /);
@@ -58,8 +51,8 @@ describe("broccoli-pug2", () => {
       );
     });
 
-    it("none", () => {
-      return expect(compileFooJs("none")).not.to.eventually.match(
+    it("raw JavaScript function", () => {
+      return expect(compileFooJs("function")).not.to.eventually.match(
         /export |module\.exports =/
       );
     });

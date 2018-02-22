@@ -6,14 +6,22 @@ let fs = require("fs");
 let mkdirp = require("mkdirp");
 
 class BroccoliPug extends MultiFilter {
-  constructor(inputNode, inputGlobs, options) {
+  constructor(inputNode, inputGlobs, outputType, options) {
     if (options == null) options = {};
     super([inputNode], { annotation: options.annotation });
 
-    this.render = options.render;
-    if (this.render == null) this.render = true;
-
+    this.outputType = outputType || "html";
+    let outputTypes = ["html", "es", "cjs", "function"];
+    if (outputTypes.indexOf(this.outputType) === -1) {
+      throw new Error(
+        "Expected outputType to be one of " +
+          outputTypes.join(", ") +
+          ", got " +
+          this.outputType
+      );
+    }
     this.pugOptions = options.pugOptions;
+    this.extension = options.extension;
 
     if (inputGlobs == null) inputGlobs = "**/*.pug";
     if (typeof inputGlobs === "string") inputGlobs = [inputGlobs];
@@ -22,17 +30,6 @@ class BroccoliPug extends MultiFilter {
         "Expected string or array of input files or globs, got " + inputGlobs
       );
     this.inputGlobs = inputGlobs;
-
-    this.moduleType = options.moduleType || "es";
-    if (
-      this.moduleType !== "es" &&
-      this.moduleType !== "cjs" &&
-      this.moduleType !== "none"
-    ) {
-      throw new Error(
-        'Expected moduleType "es", "cjs" or "none", got ' + this.moduleType
-      );
-    }
   }
 
   build() {
@@ -52,10 +49,13 @@ class BroccoliPug extends MultiFilter {
         });
         let source = fs.readFileSync(fullInputPath);
         let output, outputFilePath, dependencies;
-        if (this.render) {
+        if (this.outputType === "html") {
           let templateFn = pug.compile(source, pugOptions);
           output = templateFn(pugOptions);
-          outputFilePath = inputFilePath.replace(/\.[^.]+$/, ".html");
+          outputFilePath = inputFilePath.replace(
+            /\.[^.]+$/,
+            "." + (this.extension || "html")
+          );
           dependencies = templateFn.dependencies;
         } else {
           if (pugOptions.name == null) pugOptions.name = "template";
@@ -64,12 +64,15 @@ class BroccoliPug extends MultiFilter {
             pugOptions
           );
           output = res.body;
-          if (this.moduleType === "es") {
+          if (this.outputType === "es") {
             output += "\nexport default " + pugOptions.name + ";";
-          } else if (this.moduleType === "cjs") {
+          } else if (this.outputType === "cjs") {
             output += "\nmodule.exports = " + pugOptions.name + ";";
           }
-          outputFilePath = inputFilePath.replace(/\.[^.]+$/, ".js");
+          outputFilePath = inputFilePath.replace(
+            /\.[^.]+$/,
+            "." + (this.extension || "js")
+          );
           dependencies = res.dependencies;
         }
 

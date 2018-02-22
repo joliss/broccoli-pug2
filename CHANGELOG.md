@@ -1,5 +1,7 @@
 # master
 
+* Fold "render" and "moduleType" options into single "outputType" argument
+
 # 0.2.1
 
 * Fix caching dependencies path handling bug
