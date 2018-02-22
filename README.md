@@ -18,7 +18,7 @@ let pugSources = "src/templates";
 // Compile to .html:
 let htmlFiles = new Pug(pugSources, "pages/**/*.pug");
 
-// Compile to .js ES6 modules:
+// Compile to .js ES6 modules, exporting client-side template functions:
 let jsTemplates = new Pug(pugSources, "pages/**/*.pug", "es");
 ```
 
@@ -36,16 +36,16 @@ This compiles `pages/dir/foo.pug` to `pages/dir/foo.html` and
 
     * `outputType`:
 
-        * "html" (default): Compile to HTML. Any JavaScript in templates will be
-          executed in the Node/Broccoli process.
+        * `"html"` (default): Compile to HTML. Any JavaScript in Pug files will be
+          executed at build time in the Node/Broccoli process.
 
-        * "es": Compile to ES6 modules, with
+        * `"es"`: Compile to ES6 modules, with
           `export default function template() { ... }`.
 
-        * "cjs": Compile to CommonJS (Node/Browserify) modules, with
+        * `"cjs"`: Compile to CommonJS (Node/Browserify) modules, with
           `module.exports = function template() { ... }`.
 
-        * "function": Compile to raw JavaScript function declarations
+        * `"function"`: Compile to raw JavaScript function declarations
           `function template() { ... }`.
 
     * `options`: An options object.
