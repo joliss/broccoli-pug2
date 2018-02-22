@@ -1,6 +1,6 @@
 "use strict";
 
-var BroccoliPug = require("../");
+var BroccoliPug = require("./");
 var fixture = require("broccoli-fixture");
 var fixturify = require("fixturify");
 var Plugin = require("broccoli-plugin");
