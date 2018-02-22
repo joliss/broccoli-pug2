@@ -1,5 +1,7 @@
 # master
 
+# 0.2.1
+
 * Fix caching dependencies path handling bug
 
 # 0.2.0
