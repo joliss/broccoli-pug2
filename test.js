@@ -29,14 +29,17 @@ describe("broccoli-pug2", () => {
 
   describe("JS output", () => {
     function compileFooJs(moduleType) {
-      let source = new fixture.Node({ "foo.pug": "div foo_contents" });
+      let source = new fixture.Node({
+        "foo.pug": "include ./bar.pug",
+        "bar.pug": "div bar_contents"
+      });
       let pugNode = new BroccoliPug(source, "*.pug", {
         render: false,
         moduleType: moduleType
       });
 
       return fixture.build(pugNode).then(output => {
-        expect(output["foo.js"]).to.match(/function [\s\S]*foo_contents/);
+        expect(output["foo.js"]).to.match(/function [\s\S]*bar_contents/);
         return output["foo.js"];
       });
     }
