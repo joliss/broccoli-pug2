@@ -66,7 +66,8 @@ describe("broccoli-pug2", () => {
     let source = new fixture.Node({
       a: {
         b: {
-          "foo.pug": "div"
+          "foo.pug": "include bar.pug",
+          "bar.pug": "div"
         }
       }
     });
@@ -75,7 +76,8 @@ describe("broccoli-pug2", () => {
     return expect(fixture.build(pugNode)).to.eventually.deep.equal({
       a: {
         b: {
-          "foo.html": "<div></div>"
+          "foo.html": "<div></div>",
+          "bar.html": "<div></div>"
         }
       }
     });

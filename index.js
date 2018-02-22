@@ -44,13 +44,13 @@ class BroccoliPug extends MultiFilter {
     return this.buildAndCache(
       inputFiles,
       (inputFilePath, outputDirectoryPath) => {
-        let absoluteInputPath = this.inputPaths[0] + "/" + inputFilePath;
+        let fullInputPath = this.inputPaths[0] + path.sep + inputFilePath;
 
         let pugOptions = Object.assign({}, this.pugOptions || {}, {
-          filename: absoluteInputPath,
+          filename: fullInputPath,
           basedir: this.inputPaths[0]
         });
-        let source = fs.readFileSync(absoluteInputPath);
+        let source = fs.readFileSync(fullInputPath);
         let output, outputFilePath, dependencies;
         if (this.render) {
           let templateFn = pug.compile(source, pugOptions);
@@ -73,12 +73,17 @@ class BroccoliPug extends MultiFilter {
           dependencies = res.dependencies;
         }
 
-        mkdirp.sync(outputDirectoryPath + "/" + path.dirname(outputFilePath));
-        fs.writeFileSync(outputDirectoryPath + "/" + outputFilePath, output);
+        mkdirp.sync(
+          outputDirectoryPath + path.sep + path.dirname(outputFilePath)
+        );
+        fs.writeFileSync(
+          outputDirectoryPath + path.sep + outputFilePath,
+          output
+        );
 
-        return [inputFilePath]
-          .concat(dependencies)
-          .map(relativePath => path.resolve(this.inputPaths[0], relativePath));
+        return {
+          dependencies: [fullInputPath].concat(dependencies)
+        };
       }
     );
   }
